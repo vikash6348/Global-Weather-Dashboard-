@@ -1,0 +1,50 @@
+/* Reset & Fullscreen Setup */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(135deg, #6dd5ed, #2193b0);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: white;
+}
+
+/* App container */
+.app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+/* Title styles */
+.app h1 {
+  font-size: 2.8rem;
+  margin-bottom: 10px;
+}
+
+.app h2 {
+  font-size: 1.5rem;
+  margin-bottom: 30px;
+}
+
+/* Weather card */
+.weather-card {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 25px 50px;
+  border-radius: 20px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(8px);
+  font-size: 1.3rem;
+}
