@@ -1,7 +1,3 @@
-Perfect Vikash 👍
-Here’s a **professional README description** you can directly paste into your GitHub repository:
-
----
 
 # 🌦️ Global Weather Dashboard
 
