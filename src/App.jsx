@@ -189,6 +189,14 @@ function App() {
 
   const weatherClass = weather ? getWeatherClass(weather) : "day";
   const currentWeather = weather ? weather.current_weather : null;
+  
+  // Check if it's night and clear (no precipitation)
+  const isClearNight = weatherClass === "night" && 
+                      currentWeather && 
+                      ![45, 48, 51, 53, 55, 56, 57, 61, 63, 65, 66, 67, 71, 73, 75, 77, 80, 81, 82, 85, 86, 95, 96, 99].includes(currentWeather.weathercode);
+
+  // Check if visibility might be low (night or rainy conditions)
+  const isLowVisibilityMode = ["night", "rainy", "rainy-night", "stormy", "stormy-night"].includes(weatherClass);
 
   return (
     <div className={`app ${weatherClass}`}>
@@ -236,13 +244,16 @@ function App() {
       {/* Weather elements */}
       {currentWeather?.is_day === 1 && weatherClass === "day" && <div className="sun"></div>}
 
-      {currentWeather?.is_day === 0 && weatherClass === "night" && (
+      {isClearNight && (
         <>
           <div className="moon"></div>
-          {[...Array(20)].map((_, i) => (
+          {[...Array(50)].map((_, i) => (
             <div key={i} className="star" style={{
               '--x': Math.random(),
-              '--y': Math.random()
+              '--y': Math.random(),
+              '--size': `${Math.random() * 3 + 1}px`,
+              '--delay': `${Math.random() * 5}s`,
+              '--duration': `${Math.random() * 3 + 2}s`
             }}></div>
           ))}
         </>
@@ -250,9 +261,41 @@ function App() {
 
       {(weatherClass === "cloudy" || weatherClass === "cloudy-night") && (
         <>
-          <div className="cloud" style={{ width: "120px", height: "60px", top: "100px", left: "20%" }}></div>
-          <div className="cloud" style={{ width: "180px", height: "90px", top: "150px", left: "50%" }}></div>
-          <div className="cloud" style={{ width: "140px", height: "70px", top: "200px", left: "75%" }}></div>
+          <div className="cloud" style={{ 
+            '--size': '120px', 
+            '--top': '100px', 
+            '--left': '20%', 
+            '--speed': '20s',
+            '--delay': '0s'
+          }}></div>
+          <div className="cloud" style={{ 
+            '--size': '180px', 
+            '--top': '150px', 
+            '--left': '50%', 
+            '--speed': '25s',
+            '--delay': '5s'
+          }}></div>
+          <div className="cloud" style={{ 
+            '--size': '140px', 
+            '--top': '200px', 
+            '--left': '75%', 
+            '--speed': '30s',
+            '--delay': '10s'
+          }}></div>
+          <div className="cloud" style={{ 
+            '--size': '100px', 
+            '--top': '80px', 
+            '--left': '40%', 
+            '--speed': '22s',
+            '--delay': '7s'
+          }}></div>
+          <div className="cloud" style={{ 
+            '--size': '160px', 
+            '--top': '180px', 
+            '--left': '10%', 
+            '--speed': '28s',
+            '--delay': '3s'
+          }}></div>
         </>
       )}
 
@@ -308,25 +351,27 @@ function App() {
 
           {weather.daily && (
             <div className="forecast-container">
-              <h3>7-Day Forecast</h3>
+              <h3 className={isLowVisibilityMode ? "low-visibility-text" : ""}>7-Day Forecast</h3>
               <div className="forecast-cards">
                 {weather.daily.time.map((date, index) => (
-                  <div key={index} className="forecast-card">
-                    <p className="forecast-date">{getDayName(date)}</p>
+                  <div key={index} className={`forecast-card ${isLowVisibilityMode ? "low-visibility" : ""}`}>
+                    <p className={`forecast-date ${isLowVisibilityMode ? "low-visibility-text" : ""}`}>
+                      {getDayName(date)}
+                    </p>
                     <p className="forecast-icon">
                       {getWeatherIcon(weather.daily.weathercode[index])}
                     </p>
-                    <p className="forecast-temp-max">
+                    <p className={`forecast-temp-max ${isLowVisibilityMode ? "low-visibility-text" : ""}`}>
                       {Math.round(weather.daily.temperature_2m_max[index])}°
                     </p>
-                    <p className="forecast-temp-min">
+                    <p className={`forecast-temp-min ${isLowVisibilityMode ? "low-visibility-text" : ""}`}>
                       {Math.round(weather.daily.temperature_2m_min[index])}°
                     </p>
                     <div className="forecast-details">
-                      <p className="precipitation">
+                      <p className={`precipitation ${isLowVisibilityMode ? "low-visibility-text" : ""}`}>
                         💧 {weather.daily.precipitation_probability_mean[index] || 0}%
                       </p>
-                      <p className="wind">
+                      <p className={`wind ${isLowVisibilityMode ? "low-visibility-text" : ""}`}>
                         💨 {Math.round(weather.daily.windspeed_10m_max[index])} km/h
                       </p>
                     </div>
